@@ -5,6 +5,7 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -13,6 +14,7 @@ import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.event.Event;
+import seedu.address.model.event.EventName;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 
@@ -105,6 +107,7 @@ public class ModelManager implements Model {
 
     @Override
     public void addPerson(Person person) {
+        assert person.getId() != -1 : "Person ID should not be -1 when adding the person to the address book.";
         addressBook.addPerson(person);
         updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
     }
@@ -112,6 +115,7 @@ public class ModelManager implements Model {
     @Override
     public void setPerson(Person target, Person editedPerson) {
         requireAllNonNull(target, editedPerson);
+        assert editedPerson.getId() != -1 : "Person ID should not be -1 when editing the person in the address book.";
 
         addressBook.setPerson(target, editedPerson);
     }
@@ -140,9 +144,43 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void deleteEvent(Event target) {
+        addressBook.removeEvent(target);
+    }
+
+    @Override
     public void addEvent(Event event) {
+        assert event.getEventId() != -1 : "Event ID should not be -1 when adding the event to the address book.";
         addressBook.addEvent(event);
         updateFilteredEventList(PREDICATE_SHOW_ALL_EVENTS);
+    }
+
+    @Override
+    public List<Event> findEventsWithName(EventName eventName) {
+        requireNonNull(eventName);
+        return addressBook.findEventsWithName(eventName);
+    }
+
+    @Override
+    public void assignEventToPerson(Person person, Event event) {
+        requireAllNonNull(person, event);
+        addressBook.assignEventToPerson(person, event);
+    }
+
+    @Override
+    public void unassignEventFromPerson(Person person, Event event) {
+        requireAllNonNull(person, event);
+        addressBook.unassignEventFromPerson(person, event);
+    }
+
+    @Override
+    public int generateNewPersonId() {
+        return addressBook.generateNewPersonId();
+    }
+
+    @Override
+    public int generateNewEventId() {
+        return addressBook.generateNewEventId();
     }
 
     //=========== Filtered Person List Accessors =============================================================
@@ -176,6 +214,27 @@ public class ModelManager implements Model {
     public void updateFilteredEventList(Predicate<Event> predicate) {
         requireNonNull(predicate);
         filteredEvents.setPredicate(predicate);
+    }
+
+    @Override
+    public boolean hasEventById(int eventId) {
+        return addressBook.hasEventById(eventId);
+    }
+
+    @Override
+    public Event getEventById(int eventId) {
+        try {
+            return addressBook.getEventById(eventId);
+        } catch (NoSuchElementException e) {
+            return null; // Return null if no event is found
+        }
+    }
+
+
+    @Override
+    public void setEvent(Event target, Event editedEvent) {
+        requireAllNonNull(target, editedEvent);
+        addressBook.setEvent(target, editedEvent);
     }
 
     @Override

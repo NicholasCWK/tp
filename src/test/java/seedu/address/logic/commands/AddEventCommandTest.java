@@ -24,6 +24,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.event.Event;
+import seedu.address.model.event.EventName;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.EventBuilder;
@@ -89,7 +90,7 @@ public class AddEventCommandTest {
     }
 
     /**
-     * A default model stub that have all of the methods failing.
+     * A default model stub that has all of the methods failing.
      */
     private class ModelStub implements Model {
         @Override
@@ -178,7 +179,17 @@ public class AddEventCommandTest {
         }
 
         @Override
+        public void deleteEvent(Event target) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void addEvent(Event event) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public List<Event> findEventsWithName(EventName eventName) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -189,6 +200,41 @@ public class AddEventCommandTest {
 
         @Override
         public void updateFilteredEventList(Predicate<Event> predicate) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void assignEventToPerson(Person person, Event event) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void unassignEventFromPerson(Person person, Event event) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public int generateNewPersonId() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public int generateNewEventId() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean hasEventById(int id) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public Event getEventById(int id) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setEvent(Event target, Event editedEvent) {
             throw new AssertionError("This method should not be called.");
         }
     }
@@ -209,10 +255,15 @@ public class AddEventCommandTest {
             requireNonNull(event);
             return this.event.isSameEvent(event);
         }
+
+        @Override
+        public int generateNewEventId() {
+            return 1;
+        }
     }
 
     /**
-     * A Model stub that always accept the event being added.
+     * A Model stub that always accepts the event being added.
      */
     private class ModelStubAcceptingEventAdded extends ModelStub {
         final ArrayList<Event> eventsAdded = new ArrayList<>();
@@ -233,6 +284,10 @@ public class AddEventCommandTest {
         public ReadOnlyAddressBook getAddressBook() {
             return new AddressBook();
         }
-    }
 
+        @Override
+        public int generateNewEventId() {
+            return 1;
+        }
+    }
 }

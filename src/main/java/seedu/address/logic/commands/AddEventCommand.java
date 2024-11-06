@@ -22,13 +22,13 @@ public class AddEventCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds an event to the address book. "
             + "Parameters: "
             + PREFIX_EVENT_NAME + "EVENT_NAME "
-            + PREFIX_EVENT_DESCRIPTION + "EVENT_DESCRIPTION"
-            + PREFIX_EVENT_START_DATE + "EVENT_START_DATE"
+            + PREFIX_EVENT_DESCRIPTION + "EVENT_DESCRIPTION "
+            + PREFIX_EVENT_START_DATE + "EVENT_START_DATE "
             + PREFIX_EVENT_END_DATE + "EVENT_END_DATE\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_EVENT_NAME + "Meeting "
-            + PREFIX_EVENT_DESCRIPTION + "Club Meeting for Orientation"
-            + PREFIX_EVENT_START_DATE + "2024-10-01"
+            + PREFIX_EVENT_DESCRIPTION + "Club Meeting for Orientation "
+            + PREFIX_EVENT_START_DATE + "2024-10-01 "
             + PREFIX_EVENT_END_DATE + "2024-10-10\n"
             + "Dates must be in YYYY-MM-DD format!";
 
@@ -52,9 +52,10 @@ public class AddEventCommand extends Command {
         if (model.hasEvent(toAdd)) {
             throw new CommandException(MESSAGE_DUPLICATE_EVENT);
         }
-
-        model.addEvent(toAdd);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
+        int newEventId = model.generateNewEventId();
+        Event updatedEvent = toAdd.changeId(newEventId);
+        model.addEvent(updatedEvent);
+        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(updatedEvent)), true);
     }
 
     @Override

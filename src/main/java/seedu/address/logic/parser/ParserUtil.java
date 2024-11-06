@@ -5,8 +5,10 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
@@ -179,5 +181,45 @@ public class ParserUtil {
             throw new ParseException(EventDuration.MESSAGE_CONSTRAINTS);
         }
         return new EventDuration(start, end);
+    }
+
+    /**
+     * Parses the given {@code String} representing a file name.
+     *
+     * This method trims any leading or trailing spaces from the file name and checks if the file name is valid.
+     * A file name is considered invalid if it is empty.
+     * If the file name is invalid, a {@code ParseException} is thrown.
+     *
+     * @param fileName The file name to be parsed and validated.
+     * @return The trimmed file name if it is valid.
+     * @throws ParseException if the file name is empty or invalid.
+     */
+    public static String parseFileName(String fileName) throws ParseException {
+        requireNonNull(fileName);
+        String trimmedFileName = fileName.trim();
+        if (fileName.isEmpty()) {
+            throw new ParseException(null);
+        }
+        return trimmedFileName;
+    }
+
+    /**
+     * Parses a String containing the field to search and keywords,
+     * into a String representing the field to search.
+     */
+    public static String parseField(String fieldAndKeywords) {
+        requireNonNull(fieldAndKeywords);
+        String field = fieldAndKeywords.split(" ")[0].trim();
+        return field;
+    }
+
+    /**
+     * Parses a List containing keyword arguments,
+     * into a List containing the keywords.
+     */
+    public static List<String> parseSearchKeywords(List<String> keywordArgument) {
+        requireNonNull(keywordArgument);
+        List<String> keywords = Arrays.asList(keywordArgument.get(0).split(" "));
+        return keywords;
     }
 }
