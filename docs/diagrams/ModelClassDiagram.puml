@@ -65,6 +65,6 @@ Name -[hidden]right-> Phone
 Phone -[hidden]right-> Address
 Address -[hidden]right-> Email
 
-ModelManager --> "* filtered" Person
-ModelManager --> "* filtered" Event
+ModelManager --> "~* filtered" Person
+ModelManager --> "~* filtered" Event
 @enduml
